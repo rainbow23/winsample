@@ -11,8 +11,8 @@ void error(char *msg)
 		exit(1);
 }
 
-void is_Correct_ip(char *ps);
-void* segmentRangeIsMatch(void* ipAddr); 
+int is_Correct_ip(char *ipAddr);
+int segmentRangeIsMatch(int segNum); 
 
 int main(void) 
 {
@@ -54,77 +54,55 @@ int main(void)
   return 0;
 }
 
-struct args {
-  char * buff;
-  int * count;
-};
-
 //correct returns 1, wrong returns 0
-void is_Correct_ip(char *ipAddr)
+int is_Correct_ip(char *ipAddr)
 {
-    char *eachIpAddr;
-    eachIpAddr = strtok(ipAddr, ",");
+    char *eachIpAddr[50];
+		int cnt = 0;
+		for(eachIpAddr[cnt] = strtok(ipAddr, ","); eachIpAddr[cnt] != NULL; eachIpAddr[++cnt] = strtok(NULL, ","))
+		{
+			printf("eachIpAddr[%i] %s\n", cnt, eachIpAddr[cnt]);
+		}
+		cnt--;
 
-			printf("eachIpAddr2 %s\n", eachIpAddr);
-      eachIpAddr = strtok(NULL, ",");
-			printf("eachIpAddr3 %s\n", eachIpAddr);
-/*
-    while (eachIpAddr != NULL)
-    {
-      char buff[1024];
-      for (int i=0; i < 1024; i++)
-        buff[i] = '\0';
+		if(cnt != 4)
+		{
+			printf("dis correct ip address");
+			return 0;
+		}
 
-      strcpy(buff,eachIpAddr);
-
-			printf("eachIpAddr1 %s\n", eachIpAddr);
-			pthread_t t0;
-			long matchIpAddNum;
-			if(pthread_create(&t0, NULL, segmentRangeIsMatch, (void*)buff) == -1)
+		int correctSegNum  = 0;
+		char *segIpAddr[cnt];
+		int i=0;
+		for(segIpAddr[i] = strtok(eachIpAddr[i], "."), segIpAddr[i] != NULL; ++i, segIpAddr[i] = strtok(eachIpAddr[i], "."))
+		{
+			char * bb[10];
+			for(int j=0 ; ; bb[++j] = strtok(NULL, "."))
 			{
-				error("can't create thread0");
+				
 			}
+		}
+		correctSegNum += segmentRangeIsMatch((int)eachIpAddr[i]);
 
-			//thread return match num
-			void* result;
-			if(pthread_join(t0, &result) == -1) 
-			{
-				error("can't join thread0");
-			}
-			
-			printf("result %lo\n",(long)result);
-
-			if ((long)result == 4)
-			{
-				printf("true\n");
-			}
-			else
-			{
-				printf("false\n");
-			}
-			printf("eachIpAddr2 %s\n", eachIpAddr);
-      eachIpAddr = strtok(NULL, ",");
-			printf("eachIpAddr3 %s\n", eachIpAddr);
-    }
-*/
+		if(correctSegNum == 4) 
+		{
+			printf("true\n");
+			return 1;
+		}
+		else 
+		{
+			printf("false\n");
+			return 0;
+		}
 }
 
-void* segmentRangeIsMatch(void* ipAddr) 
+//return 0 or 1
+int segmentRangeIsMatch(int segNum) 
 {
-	long cnt = 0;
-  char *sepIp;
-  sepIp = strtok((char*)ipAddr, ".");
-
-  while (sepIp != NULL)
-  {
-    int num = atoi(sepIp);
-    if (num)
-    {
-
-      if (num >= 1 && num <= 100)
-        cnt++;
+		int cnt;
+		if (segNum >= 1 && segNum <= 100)
+		{
+        return 1;
     }
-    sepIp = strtok(NULL, ".");
-  }
-    return (void*)cnt;
+    return 0;
 }
