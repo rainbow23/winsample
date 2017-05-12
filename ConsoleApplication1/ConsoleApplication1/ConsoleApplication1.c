@@ -13,6 +13,7 @@ void error(char *msg)
 
 int is_Correct_ip(char *ipAddr);
 int segmentRangeIsMatch(int segNum); 
+int charPointToInt(char *pChar);
 
 int main(void) 
 {
@@ -47,7 +48,7 @@ int main(void)
 				}
 
     //hantei
-		printf("ipAddrs%s\n", ipAddrs);
+		printf("ipAddrs %s\n", ipAddrs);
     is_Correct_ip(ipAddrs);
   }
 
@@ -63,54 +64,47 @@ int is_Correct_ip(char *ipAddr)
 		{
 			printf("eachIpAddr[%i] %s\n", cnt, eachIpAddr[cnt]);
 		}
-		cnt--;
+		printf("cnt %d\n", cnt);
 
-    /*
-    char *eachWord[100];
-    int m = 0; //reference ref struct pointer
-    int cnt = 0;
-
-    for (eachWord[cnt] = strtok(ref[m], "."); m < n; eachWord[++cnt] = strtok(ref[++m], "."))
-    {
-      for (; eachWord[cnt] != NULL; eachWord[++cnt] = strtok(NULL, "."))
-      {
-        printf("eachWord[%i] %s\n", cnt, eachWord[cnt]);
-      }
-
-      cnt--;//delete null value
-      printf("\n");
-    }
-    */
 		int correctSegNum  = 0;
 		char *segIpNum[50];
-		int i=0;
 		int cnt2 =0;
-		for(segIpNum[cnt2] = strtok(eachIpAddr[i], "."), i < cnt; segIpNum[++cnt2] = strtok(eachIpAddr[++i], ".");)
+		int i=0;
+		for(segIpNum[cnt2] = strtok(eachIpAddr[i], "."); 
+				i < cnt; 
+				segIpNum[++cnt2] = strtok(eachIpAddr[++i], "."))
 		{
-			for(; segIpNum[cnt2] != NULL; segIpNum[++cnt2] = strtok(NULL, "."))
-			{
-        correctSegNum += segmentRangeIsMatch((int)eachIpAddr[cnt2]);
-			}
-      cnt2=0;
+				correctSegNum =0;
+				for(; segIpNum[cnt2] != NULL; segIpNum[++cnt2] = strtok(NULL, "."))
+				{
+					correctSegNum += segmentRangeIsMatch(atoi(segIpNum[cnt2]));
+				}
+				printf("cnt2 %d\n", cnt2);
+				cnt2--;//NULL代入を消す
 
-      if (correctSegNum == 4)
-      {
-        printf("true\n");
-        return 1;
-      }
-      else
-      {
-        printf("false\n");
-        return 0;
-      }
-      printf("\n");
+				if (correctSegNum == 4)
+				{
+					printf("true\n");
+				}
+				else
+				{
+					printf("false\n");
+				}
+				printf("\n");
 		}
+
+		for(int i=0; i < cnt2; i++)
+		{
+			//printf("segIpNum[%i] %s\n", i, segIpNum[i]);
+		}
+			return 0;
 }
 
 //return 0 or 1
 int segmentRangeIsMatch(int segNum) 
 {
 		int cnt;
+		printf("segNum %d\n", segNum);
 		if (segNum >= 1 && segNum <= 100)
 		{
         return 1;
